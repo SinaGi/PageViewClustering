@@ -610,7 +610,7 @@ class ProductionPVCluster(object):
 if __name__ == '__main__':
     print "Start date and time: " + time.strftime("%c")
     start_time = time.time()
-    #comment
+    #comment0
     run = ProductionPVCluster(startDate='2016-01-01',
                                endDate='2016-05-01',
                                aggPVThresh=100)  # Parameter to set minumum unumber of PV for a subCat to be included in analysis
