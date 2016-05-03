@@ -59,8 +59,10 @@ algorithms on SKU network defined by point-wise mutual information
             into smaller ones
     subMethod (optional - default = 8): the commmunity detection method for breaking the large cluster specified by
             clSizeThresh
+    iterCount: number of times to try to break the clusters by adjusting the parameters of Comm Detect Alg (gamma in
+            increased by 0.5 increments for spin glass comm detection in the current version)
 Created: Sina G, March 2016
-Updates:
+Updates: Sina G, April 2016, May 2016
 """
 
 class PVCluster(object):
@@ -361,10 +363,18 @@ class PVCluster(object):
         """
         Read the edges file, convert it to graph items
         Run community detection algorithm based on selected method
-        :param method: determine the community detection alg., k: cluster size (optional)
-        :return: clusTable: cluster membership table, format: dictionary {sku: clusterID}
+        Option of creating the graph of clusters
+        :param
+            method: determine the community detection alg., k: cluster size (optional)
+            subComm: graph data to be used to create clusters - when None the edgesW.txt file on hard is used
+            sg_gamma: gamma factor for the spin glass comm detection algorithm - when None the default gamma is used
+        :return:
+            clusTable: cluster membership table, format: dictionary {sku: clusterID}
+            counter: {cluster IDs: cluster sizes}
+            community: the item that captures the structure of the community of clusters after
+                applying the comm detection algorithm
         """
-        start_time = time.time()
+
         # Reading the files for community detection
         if subComm is None:
             g = igraph.Graph.Read_Ncol('edgesW.txt', weights=True, directed=False)
@@ -429,7 +439,6 @@ class PVCluster(object):
 
         clusTable = dict(zip(g.vs['name'], members))
         # print clusTable
-        print("--- %s seconds --- Clustering Process " % (time.time() - start_time))
 
         # To plot the graph when running the comm clustering
         # self.plotGraph(g, members, numClus)
@@ -446,7 +455,7 @@ class PVCluster(object):
         clusTable: dictionary of {sku:clusterID}
         counter: dictionary of {clusterId:cluster size}
         """
-
+        start_time = time.time()
         clusTable, counter, communities = self.commDetect(method=self.method)
 
         # TO ASSURE NO cLUSTER HAS large size we can loop it here more than once
@@ -486,6 +495,8 @@ class PVCluster(object):
 
         # assigning the new sub cluster sizes.
         counter = collections.Counter(mergedClusTable2.values())
+
+        print("--- %s seconds --- Clustering Process " % (time.time() - start_time))
 
         # We need to use the updated clustering data only if there has been a large cluster
         print 'mergedClusTable2 & counter -->', mergedClusTable2, counter
@@ -537,6 +548,13 @@ class PVCluster(object):
         return counter
 
     def plotGraph(self, g, members, numOfClus):
+        """
+        generating the graph of vertices and edges
+        :param g: graph file to be plotted
+        :param members: vector of membership (size = # of SKUs)
+        :param numOfClus: number of clusters
+        :return: None
+        """
 
         # Setting up the ends of the spectrum
         lime = Color("lime")
@@ -608,6 +626,9 @@ class ProductionPVCluster(object):
                             """ %(self.aggPVThresh))
         subCats = readerFunc.fetchall()
         return subCats
+
+
+
 
 
 if __name__ == '__main__':
