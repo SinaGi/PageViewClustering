@@ -1,0 +1,38 @@
+---
+title: "PV_Clustering-1Month-Pageviews-nPMI(norm=1)-MultiLevel(Method=4,8-:,gamma=1,lambda=0.1,spins=75)-10,3,1,50 timeThresh,minView,minJointView,pmiPerc"
+author: "Sina G"
+date: "April 21, 2016"
+output: html_document
+---
+
+
+
+```{r, echo=FALSE, error=FALSE, message=FALSE}
+library(DT)
+# load("U:/8. Data Analytics/Sina/ColorSKUClustering/Rcode/tables.Rdata")
+#dat <- read.csv("U:/8. Data Analytics/Sina/PageViewClustering/PythonCode/clusImgTab.csv",
+#                header = FALSE, col.names = c("SKU", "ClusterID", "SubSubCat", "path"))
+
+dat <- read.csv("U:/8. Data Analytics/Sina/PageViewClustering/PythonCode/clusPV_Landscape_4_8_50.csv",
+                header = FALSE, col.names = c("SKU", "ClusterID", "SubSubCat", "path"))
+
+dat$path <- noquote(paste("\'<img width=\'75\' src=\"", dat$path, "\" ></img>\'", sep = ""))
+
+#dat <- data.frame(
+  #SKU = c(111,222,333),
+#  SKU = dat$sku,
+#  Cluster = dat$cluster,
+  #SubSubCat = c("Hardwood Flooring"),
+#  Price = dat$price,
+#  img = dat$path
+#  img = c('<img src="http://icons.iconarchive.com/icons/icons-land/vista-map-markers/32/Map-Marker-Marker-Outside-Chartreuse-icon.png" ></img>',
+#          '<img src="http://a.builddircdn.com/images/Map-Marker-Red.png" ></img>',
+#           '<img src="http://a.builddircdn.com/images/Flag-Orange.png" ></img>'
+#  )
+# ) 
+```
+
+```{r, echo=FALSE, error=FALSE, message=FALSE}
+DT::datatable(dat,escape = FALSE)
+
+```
