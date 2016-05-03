@@ -618,7 +618,8 @@ if __name__ == '__main__':
     subcats = run.readProdCat()
     tests = {}
     # Two subcats not working - test them , this is a temp solution, subcats are derived from the DB above
-    for sc in  [# 'Accessories',
+    for sc in ['Furniture']:
+                # [ 'Accessories',
                 # 'Accessory',
                 # 'Carpet & Rugs',
                 # 'Decking',
@@ -630,13 +631,13 @@ if __name__ == '__main__':
                ## 'Furniture', ---> catch error - in createDenom
                 # 'Kitchen & Bath',
                 # 'Landscape',
-                'Lighting',
-                'Millwork',
-                'Moldings & Trims',
-                'Outdoor',
-                'Outdoor Accessories',
-                'Siding',
-                'Sinks']:
+                # 'Lighting',
+                # 'Millwork',
+                # 'Moldings & Trims',
+                # 'Outdoor',
+                # 'Outdoor Accessories',
+                # 'Siding',
+                # 'Sinks']:
         print '\n','\n','\n','*********************************'
         print '***** ANALYSIS ON: ', sc
         vals = [50] # [10,25,50,75,85]
