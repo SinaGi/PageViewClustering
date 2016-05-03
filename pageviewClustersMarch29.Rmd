@@ -13,7 +13,7 @@ library(DT)
 #dat <- read.csv("U:/8. Data Analytics/Sina/PageViewClustering/PythonCode/clusImgTab.csv",
 #                header = FALSE, col.names = c("SKU", "ClusterID", "SubSubCat", "path"))
 
-dat <- read.csv("U:/8. Data Analytics/Sina/PageViewClustering/PythonCode/clusPV_Outdoor Accessories_4_8_50.csv",
+dat <- read.csv("U:/8. Data Analytics/Sina/PageViewClustering/PythonCode/clusPV_Lighting_4_8_50.csv",
                 header = FALSE, col.names = c("SKU", "ClusterID", "SubSubCat", "path"))
 
 dat$path <- noquote(paste("\'<img width=\'75\' src=\"", dat$path, "\" ></img>\'", sep = ""))

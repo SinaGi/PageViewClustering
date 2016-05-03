@@ -587,6 +587,11 @@ class ProductionPVCluster(object):
         self.db = 'DW0'
 
     def readProdCat(self):
+        """
+        This file reads the ((sub)sub)category of products to do the clustering upon
+        :return:
+        a list of subCategories
+        """
         conn = pymssql.connect(server = self.ODBC_PROD,
                                 database = self.db,
                                 user = cred.user,
@@ -602,7 +607,6 @@ class ProductionPVCluster(object):
                             )
                             SELECT SubCategory FROM cte1 WHERE freq > %d
                             """ %(self.aggPVThresh))
-
         subCats = readerFunc.fetchall()
         return subCats
 
@@ -610,42 +614,24 @@ class ProductionPVCluster(object):
 if __name__ == '__main__':
     print "Start date and time: " + time.strftime("%c")
     start_time = time.time()
-    #comment0
     run = ProductionPVCluster(startDate='2016-01-01',
                                endDate='2016-05-01',
-                               aggPVThresh=100)  # Parameter to set minumum unumber of PV for a subCat to be included in analysis
+                               aggPVThresh=200)  # Parameter to set minumum unumber of PV for a subCat to be included in analysis
 
-    subcats = run.readProdCat()
+    subCats = run.readProdCat()
+    print subCats
+    # recording the cluster sizes for each run of the model
     tests = {}
     # Two subcats not working - test them , this is a temp solution, subcats are derived from the DB above
-    for sc in ['Furniture']:
-                # [ 'Accessories',
-                # 'Accessory',
-                # 'Carpet & Rugs',
-                # 'Decking',
-                # 'Doors',
-                # 'Wood Flooring',
-                # 'Tile Flooring',
-                # 'Vinyl Flooring',
-                # 'Wall Tile & Mosaics',
-               ## 'Furniture', ---> catch error - in createDenom
-                # 'Kitchen & Bath',
-                # 'Landscape',
-                # 'Lighting',
-                # 'Millwork',
-                # 'Moldings & Trims',
-                # 'Outdoor',
-                # 'Outdoor Accessories',
-                # 'Siding',
-                # 'Sinks']:
+    for sc in subCats:
         print '\n','\n','\n','*********************************'
-        print '***** ANALYSIS ON: ', sc
+        print '***** ANALYSIS ON: ', sc[0]
         vals = [50] # [10,25,50,75,85]
         for case in vals:
             pvclus = PVCluster(startDate='2016-01-01',
                                endDate='2016-05-01',
                                catLevel='b.SubCategory',
-                               sscat=sc,
+                               sscat=sc[0],
                                timeThresh=10,
                                minViewThresh=3,
                                jointViewThresh=1,
@@ -660,16 +646,7 @@ if __name__ == '__main__':
                                iterCount=5)
 
             pvclus.calcPMI()   # read data calculate PMI
-            tests['Case_'+str(sc)+str(case)] = pvclus.skuClusImgTab()
-
-            # tests['Case_'+str(sc)] = out2  # collect cluster sizes for all runs
-
-        #    pvclus.commDetect()    # do comm detection - redundant if already called skuClusImgTab()
-        #    pvclus.skuClusImgTab()
-        #    pvclus.subComm()
-
-         #   tests['Case_'+str(case)] = pvclus.skuClusImgTab() # do comm detection and write image tab
-    #    pvclus.createDenomData()  # for test; this is called by calcPMI
+            tests['Case_'+str(sc)+str(case)] = pvclus.skuClusImgTab()  # Create clusters and put them in tables
 
     print tests
     print("--- %s seconds --- Complete Clustering Process on All SubCats: " % (time.time() - start_time))
