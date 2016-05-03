@@ -568,7 +568,6 @@ class PVCluster(object):
         # dendPlot(g)
 
 
-
 class ProductionPVCluster(object):
     """
     class for functions required to productionize the PV color cluster process
