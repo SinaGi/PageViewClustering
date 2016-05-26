@@ -129,6 +129,43 @@ class PVCluster(object):
         """
 
         # WE NEED TO FIX THE READS FROM THE DATABASE:
+        # EXAMPLE CODE FOR SPARK READING FROM DATABASE:
+            df_productMetrics = sqlContext.\
+    #        read.format('jdbc').\
+    #        options(url="""jdbc:jtds:sqlserver://10.0.2.85;domain=BUILDDIRECT;
+    #        appName=RazorSQL;useCursors=true;user="""+cred.user+""";password=""" + cred.passw+""";""",
+    #                dbtable=
+    #                 """
+    #                        (select productItemID,
+    #                                numRatedCarts,
+    #                                numOrders,
+    #                                subSubCategory,
+    #                                conv_crt_to_ord,
+    #                                /*conv_crt_to_ord,
+    #                                conv_crt_to_ord_Georgia,
+    #                                conv_crt_to_ord_Illinois,
+    #                                conv_crt_to_ord_California,
+    #                                conv_crt_to_ord_NewJersey,
+    #                                conv_crt_to_ord_Texas,*/
+    #                                CEILING((PERCENT_RANK()OVER(PARTITION BY subSubCategory ORDER BY conv_crt_to_ord ASC))*100)
+    #                                as percentile_cart_to_ord,
+    #                                CEILING((PERCENT_RANK()OVER(PARTITION BY subSubCategory ORDER BY conv_crt_to_ord_Georgia ASC))*100)
+    #                                as percentile_cart_to_ord_Georgia,
+    #                                CEILING((PERCENT_RANK()OVER(PARTITION BY subSubCategory ORDER BY conv_crt_to_ord_Illinois ASC))*100)
+    #                                as percentile_cart_to_ord_Illinois,
+    #                                CEILING((PERCENT_RANK()OVER(PARTITION BY subSubCategory ORDER BY conv_crt_to_ord_California ASC))*100)
+    #                                as percentile_cart_to_ord_California,
+    #                                CEILING((PERCENT_RANK()OVER(PARTITION BY subSubCategory ORDER BY conv_crt_to_ord_NewJersey ASC))*100)
+    #                                as percentile_cart_to_ord_NewJersey,
+    #                                CEILING((PERCENT_RANK()OVER(PARTITION BY subSubCategory ORDER BY conv_crt_to_ord_Texas ASC))*100)
+    #                                as percentile_cart_to_ord_Texas
+    #                                from dw0..vw_ET_ProductMetrics) as A
+    #                 """,
+    #                driver = "net.sourceforge.jtds.jdbc.Driver").load().cache()
+    # df_productMetrics.registerTempTable('T_Convo')
+
+
+
         start_time = time.time()
         # read SKU number and the VisitorID
         # conn = pymssql.connect(server=self.ODBC_PROD,
